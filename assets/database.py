@@ -42,23 +42,29 @@ def is_book_created_id(conn: connection, book_id: int) -> bool:
 
 def create_book(conn: connection, book: Book) -> None:
     cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO books (title, author, published_year, isbn, available) VALUES (%s, %s, %s, %s, %s) RETURNING id",
-        (book.title, book.author, book.published_year, book.isbn, book.available))
-    conn.commit()
+    try:
+        cursor.execute(
+            "INSERT INTO books (title, author, published_year, isbn, available) VALUES (%s, %s, %s, %s, %s) RETURNING id",
+            (book.title, book.author, book.published_year, book.isbn, book.available))
+    finally:
+        conn.commit()
 
 
 def update_book(conn: connection, book_id: int, book: Book) -> None:
     cursor = conn.cursor()
-    cursor.execute("UPDATE books SET title=%s, author=%s, published_year=%s, isbn=%s, available=%s WHERE id=%s",
-                   (book.title, book.author, book.published_year, book.isbn, book.available, book_id))
-    conn.commit()
+    try:
+        cursor.execute("UPDATE books SET title=%s, author=%s, published_year=%s, isbn=%s, available=%s WHERE id=%s",
+                       (book.title, book.author, book.published_year, book.isbn, book.available, book_id))
+    finally:
+        conn.commit()
 
 
-def delete_book(conn: connection, book_id):
+def delete_book(conn: connection, book_id) -> None:
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM books WHERE id = %s", (book_id,))
-    conn.commit()
+    try:
+        cursor.execute("DELETE FROM books WHERE id = %s", (book_id,))
+    finally:
+        conn.commit()
 
 
 def fetch_all_books(conn: connection) -> list[Book]:

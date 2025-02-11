@@ -4,10 +4,10 @@ from datetime import datetime
 
 # Валидация в JSON
 class Book(BaseModel):
-    title: str = Field(..., example="War and Peace")
-    author: str = Field(..., example="Leo Tolstoy")
-    published_year: int = Field(..., ge=1450, le=datetime.now().year)
-    isbn: str = Field(..., example="9781234567897")
+    title: str = "War and Peace"
+    author: str = "Leo Tolstoy"
+    published_year: int = 1982
+    isbn: str = "9781234567897"
     available: bool = True
 
 
